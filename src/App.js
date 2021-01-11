@@ -1,9 +1,10 @@
 import React from 'react';
 import Accordion from './components/Accordion';
+import Search from './components/Search';
 
 const items=[
   {
-    title:'What is reat',
+    title:'What is react',
     content: "React is a froint end javascript frontend"
   },
   {
@@ -18,7 +19,9 @@ const items=[
 
 const App = () => {
   return(
-    <Accordion items={items}/>
+    <div>
+      <Search />
+    </div>
   );
 };
 
