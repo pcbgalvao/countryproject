@@ -12,14 +12,12 @@ const Search = () => {
   };
 
   useEffect(() => {
-    console.count("term useEffect");
     const timerId = setTimeout(() => {
       console.count("term useEffect timerId");
       setDebouncedTerm(term);
     }, 1000);
 
     return () => {
-      console.count("term useEffect return clearTimeout");
       clearTimeout(timerId);
     };
   }, [term]);
