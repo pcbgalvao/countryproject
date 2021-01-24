@@ -11,6 +11,7 @@ const Dropdown = ({ options, selected, onSelectedChange, label }) => {
         return;
       }
       setOpen(false);
+      onSelectedChange("");
     };
 
     document.body.addEventListener("click", onBodyClick, { capture: true });
@@ -22,13 +23,13 @@ const Dropdown = ({ options, selected, onSelectedChange, label }) => {
   }, []);
 
   const renderedOptions = options.map((option) => {
-    if (option.value === selected.value) {
+    if (option.label === selected.label) {
       return null;
     }
 
     return (
       <div
-        key={option.value}
+        key={option.label}
         className="item"
         onClick={() => onSelectedChange(option)}
       >
@@ -37,20 +38,26 @@ const Dropdown = ({ options, selected, onSelectedChange, label }) => {
     );
   });
 
+  const onMenuFocus = (event) => {
+    event.preventDefault();    
+  }
+
   console.log(ref.current);
 
   return (
-    <div ref={ref} className="ui form">
-      <div className="field">
-        <label className="label">{label}</label>
-        <div
-          className={`ui selection dropdown ${open ? "visible active" : ""}`}
-          onClick={() => setOpen(!open)}
-        >
-          <i className="dropdown icon"></i>
-          <div className="text">{selected.label}</div>
-          <div className={`menu ${open ? "visible transition" : ""} `}>
-            {renderedOptions}
+    <div>
+      <div ref={ref} className="ui form">
+        <div className="field">
+          <label className="label">{label}</label>
+          <div onFocus={onMenuFocus}
+            className={`ui selection dropdown ${open ? "visible active" : ""}`}
+            onClick={() => setOpen(!open)}
+          >
+            <i className="dropdown icon"></i>
+            <div className="text">{selected.label}</div>
+            <div className={`menu ${open ? "visible transition" : ""} `}>
+              {renderedOptions}
+            </div>
           </div>
         </div>
       </div>

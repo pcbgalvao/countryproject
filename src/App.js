@@ -5,6 +5,7 @@ import Dropdown from "./components/Dropdown";
 import Translate from "./components/Translate";
 import Route from "./components/Route";
 import Header from "./components/Header";
+import SideBar from './components/SideBar';
 
 const items = [
   {
@@ -21,47 +22,44 @@ const items = [
   },
 ];
 
+
 const options = [
   {
-    label: "The Color Red",
-    value: "red",
+    label: "Africa",
   },
   {
-    label: "The Color Blue",
-    value: "blue",
+    label: "Americas",
   },
   {
-    label: "The Color Green",
-    value: "green",
+    label: "Asia",
   },
   {
-    label: "A Shade of Blue",
-    value: "shade blue",
+    label: "Europe",
+  },
+  {
+    label: "Oceania",
   },
 ];
 
-export default () => {
-  const [selected, setSelected] = useState(options[0]);
+const App = () => {
+  const [region, setRegion] = useState("");
+
   return (
     <div>
-      <Header />
-      <Route path="/">
-        <Accordion items={items} />
-      </Route>
-      <Route path="/list">
-        <Search />
-      </Route>
-      <Route path="/dropdown">
+      <div className="pusher">
         <Dropdown
-          label="Select a color"
+          label="Select a Region"
           options={options}
-          selected={selected}
-          onSelectedChange={setSelected}
+          selected={region}
+          onSelectedChange={setRegion}
         />
-      </Route>
-      <Route path="/translate">
-        <Translate />
-      </Route>
+      </div>
+      <div className="ui right sidebar">
+        <SideBar region={region.label} />                          
+      </div>
     </div>
   );
 };
+
+
+export default App;
