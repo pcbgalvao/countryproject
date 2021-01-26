@@ -1,65 +1,58 @@
-import React, { useState } from "react";
-import Accordion from "./components/Accordion";
-import Search from "./components/Search";
+import axios from "axios";
+
+import React, { useState, useEffect } from "react";
 import Dropdown from "./components/Dropdown";
-import Translate from "./components/Translate";
-import Route from "./components/Route";
-import Header from "./components/Header";
-import SideBar from './components/SideBar';
+import SideBar from "./components/SideBar";
+import ListCountriesInfo from "./components/ListCountriesInfo";
 
-const items = [
-  {
-    title: "What is react",
-    content: "React is a froint end javascript frontend",
-  },
-  {
-    title: "Why React",
-    content: "React is a favorite among developers and, of course, is trendy",
-  },
-  {
-    title: "How do you use React",
-    content: "By creacting components",
-  },
-];
+import contriesData from "./data/contriesData";
 
-
-const options = [
-  {
-    label: "Africa",
-  },
-  {
-    label: "Americas",
-  },
-  {
-    label: "Asia",
-  },
-  {
-    label: "Europe",
-  },
-  {
-    label: "Oceania",
-  },
-];
+const REGIONS = ["Africa", "Americas", "Asia", "Europe", "Oceania"];
 
 const App = () => {
   const [region, setRegion] = useState("");
+  const [countriesList, setCountriesList] = useState(contriesData);
 
+  //  useEffect(() => {
+  //
+  //if (region) {
+  //      const doGetCountry = async () => {
+  //const { data } = await axios.get(
+  //          `https://restcountries.eu/rest/v2/region/${region}`,
+  //{},
+  //{}
+  //);
+  //setCountriesList(
+  //          data.map((country) => {
+  //return { ...country, checked: false };
+  //})
+  //);
+  //};
+  //doGetCountry();
+  //}
+  //}, [region]);
+
+  console.count("App");
   return (
-    <div>
-      <div className="pusher">
+    <div className="ui grid container">
+      <div className="ten wide gray column">
         <Dropdown
           label="Select a Region"
-          options={options}
+          regions={REGIONS}
           selected={region}
           onSelectedChange={setRegion}
         />
+        <ListCountriesInfo countriesList={countriesList} />
       </div>
-      <div className="ui right sidebar">
-        <SideBar region={region.label} />                          
+      <div className="four wide yellow column">
+        <SideBar
+          region={region}
+          countriesList={countriesList}
+          setCountriesList={setCountriesList}
+        />
       </div>
     </div>
   );
 };
-
 
 export default App;

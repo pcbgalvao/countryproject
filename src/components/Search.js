@@ -60,6 +60,7 @@ const Search = () => {
     );
   });
 
+  console.count ("Search");
   return (
     <div>
       <div className="ui form">

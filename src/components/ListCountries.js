@@ -1,49 +1,39 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React from "react";
+import ShowCountry from "./ShowCountry";
 
-const ListCountries = ({ region, country }) => {
-  const [deboundedCountry, setDebouncedCountry] = useState(country);
-  const [countriesList, setCountriesList] = useState([]);
-  const [selectedCountries, setSelectedCountries] = useState(countriesList);
+const ListCountries = ({ region, countriesList, setCountriesList }) => {
+  
+  const onInputSelectCountry = (checked, name) => {
+    console.log("onInputSelectCountry.event.checked-", checked);
+    console.log("onInputSelectCountry.event.name", name);
+    setCountriesList(
+      countriesList.map((country, i) => {
+        if (country.name === name) {
+          return { ...country, checked: checked };
+        } else {
+          return country;
+        }
+      })
+    );
+    console.log("onInputSelectCountry.countriesList-", countriesList[0]);
+  };
 
-  useEffect(() => {
-    const timerId = setTimeout(() => {
-      setDebouncedCountry(country);
-    }, 1000);
+  const renderedCountriesNames = countriesList.map((country) => {
+    const { checked, name } = country;
+    return (
+      <div key={name}>
+        <ShowCountry
+          country={country}
+          onInputSelectCountry={onInputSelectCountry}
+        />
+      </div>
+    );
+  });
 
-    return () => {
-      clearTimeout(timerId);
-    };
-  }, [country]);
-
-  useEffect(() => {
-    console.log(region);
-    const doGetCountry = async () => {
-      const { data } = await axios.get(
-        `https://restcountries.eu/rest/v2/region/${region}`,
-        {},
-        {}
-      );
-      setCountriesList(data);
-    };
-    doGetCountry();
-  }, [region]);
-
-  const renderedCountriesNames =
-    countriesList.map(country => {
-      return (
-        <div>
-          {country.name}
-        </div>
-      );
-    });
-
-  console.log(renderedCountriesNames);
-
+  console.count("ListCountries");
   return (
-    <div>
-      <h1 className="ui header">{country}</h1>
-      {renderedCountriesNames}
+    <div className="ui container">
+      <div className="ui list">{renderedCountriesNames}</div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const Dropdown = ({ options, selected, onSelectedChange, label }) => {
+const Dropdown = ({ regions, selected, onSelectedChange, label }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
 
@@ -11,7 +11,7 @@ const Dropdown = ({ options, selected, onSelectedChange, label }) => {
         return;
       }
       setOpen(false);
-      onSelectedChange("");
+      //onSelectedChange("");
     };
 
     document.body.addEventListener("click", onBodyClick, { capture: true });
@@ -20,30 +20,31 @@ const Dropdown = ({ options, selected, onSelectedChange, label }) => {
       console.log("Dropdown Component useEffect CLEANUP");
       document.body.removeEventListener("click", onBodyClick);
     };
-  }, []);
+  }, [selected]);
 
-  const renderedOptions = options.map((option) => {
-    if (option.label === selected.label) {
+  const renderedRegions = regions.map((region) => {
+    if (region === selected) {
       return null;
     }
 
     return (
       <div
-        key={option.label}
+        key={region}
         className="item"
-        onClick={() => onSelectedChange(option)}
+        onClick={() => onSelectedChange(region)}
       >
-        {option.label}
+        {region}
       </div>
     );
   });
 
   const onMenuFocus = (event) => {
-    event.preventDefault();    
+    event.preventDefault();
   }
 
-  console.log(ref.current);
-
+  console.log("dropdown-ref.current", ref.current);
+  console.count ("DropDown");
+  
   return (
     <div>
       <div ref={ref} className="ui form">
@@ -54,9 +55,9 @@ const Dropdown = ({ options, selected, onSelectedChange, label }) => {
             onClick={() => setOpen(!open)}
           >
             <i className="dropdown icon"></i>
-            <div className="text">{selected.label}</div>
+            <div className="text">{selected}</div>
             <div className={`menu ${open ? "visible transition" : ""} `}>
-              {renderedOptions}
+              {renderedRegions}
             </div>
           </div>
         </div>
