@@ -1,20 +1,20 @@
 import React from "react";
-import ListCountries from "./ListCountries";
+import ShowCountryList from "./ShowCountryList";
 
-const SideBar = (props) => {
-  const { region, countriesList, setCountriesList } = props;
-  
-  console.count ("SideBar");
+const SideBar = ({
+  region,
+  countriesList,
+  setCountriesList
+}) => {
+  console.count("SideBar");
   return (
     <div className="ui list">
-      <div className="ui centered header">
-        Region: {region}
-        <ListCountries
-          region={region}          
-          countriesList={countriesList}
-          setCountriesList={setCountriesList}
-        />
-      </div>
+      <div className="ui centered header">Region: {region}</div>
+      <ShowCountryList
+        region={region}
+        countriesList={countriesList}
+        setCountriesList={setCountriesList}        
+      />
     </div>
   );
 };

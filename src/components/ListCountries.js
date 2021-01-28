@@ -1,7 +1,7 @@
 import React from "react";
 import ShowCountry from "./ShowCountry";
 
-const ListCountries = ({ region, countriesList, setCountriesList }) => {
+const ListCountries = ({ countriesList, setCountriesList }) => {
   
   const onInputSelectCountry = (checked, name) => {
     console.log("onInputSelectCountry.event.checked-", checked);
@@ -19,9 +19,9 @@ const ListCountries = ({ region, countriesList, setCountriesList }) => {
   };
 
   const renderedCountriesNames = countriesList.map((country) => {
-    const { checked, name } = country;
+    const { name } = country;
     return (
-      <div key={name}>
+      <div>
         <ShowCountry
           country={country}
           onInputSelectCountry={onInputSelectCountry}

@@ -1,4 +1,6 @@
-const CountriesData = [
+import axios from "axios";
+
+const CountriesData1 = [
   {
     name: "Algeria",
     topLevelDomain: [".dz"],
@@ -337,4 +339,20 @@ const CountriesData = [
   },
 ];
 
-export default CountriesData;
+const countriesData = async (region) => {
+  const { data } = axios.get(
+    `https://restcountries.eu/rest/v2/region/${region}`,
+    {},
+    {}
+  );
+
+  return data;
+};
+
+const getData = (region) => {
+  const data= countriesData(region)
+
+  return data;
+}
+
+export default CountriesData1;

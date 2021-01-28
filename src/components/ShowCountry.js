@@ -1,31 +1,27 @@
 import React, { useEffect, useState } from "react";
 
 const ShowCountry = ({ country, onInputSelectCountry }) => {
-  const [checked, setChecked] = useState(country.checked);
+  const [check, setCheck] = useState(false);
 
-  useEffect(() => {
-    onInputSelectCountry(checked, country.name);
-  }, [checked]);
+  const handleInputChange = (event) => {
+    event.preventDefault();
+    setCheck(event.target.checked);
+    onInputSelectCountry(event.target.checked, event.target.name);
+  };
 
   const renderedCountry = (
     <div className="ui checkbox item">
       <div key={country.name}>
-        <label className={country.name} htmlFor={country.name}>
-          <a>
+        <form>
+          <label>
             <input
-              id={country.name}
               type="checkbox"
               name={country.name}
-              checked={checked}
-              onClick={(e) => {
-                setChecked(e.target.checked);
-              }}
-              onChange={() => {
-                setChecked(!checked);
-              }}
+              checked={check}
+              onChange={handleInputChange}
             />
-          </a>
-        </label>
+          </label>
+        </form>
         <p>{country.name}</p>
       </div>
     </div>

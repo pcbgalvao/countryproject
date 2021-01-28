@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const Dropdown = ({ regions, selected, onSelectedChange, label }) => {
+const Dropdown = ({ regions, regionSelected, setRegion, label }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
 
@@ -20,10 +20,10 @@ const Dropdown = ({ regions, selected, onSelectedChange, label }) => {
       console.log("Dropdown Component useEffect CLEANUP");
       document.body.removeEventListener("click", onBodyClick);
     };
-  }, [selected]);
+  }, [regionSelected]);
 
   const renderedRegions = regions.map((region) => {
-    if (region === selected) {
+    if (region === regionSelected) {
       return null;
     }
 
@@ -31,7 +31,7 @@ const Dropdown = ({ regions, selected, onSelectedChange, label }) => {
       <div
         key={region}
         className="item"
-        onClick={() => onSelectedChange(region)}
+        onClick={() => setRegion(region)}
       >
         {region}
       </div>
@@ -55,7 +55,7 @@ const Dropdown = ({ regions, selected, onSelectedChange, label }) => {
             onClick={() => setOpen(!open)}
           >
             <i className="dropdown icon"></i>
-            <div className="text">{selected}</div>
+            <div className="text">{regionSelected}</div>
             <div className={`menu ${open ? "visible transition" : ""} `}>
               {renderedRegions}
             </div>
