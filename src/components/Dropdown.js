@@ -39,7 +39,7 @@ const Dropdown = ({ regions, regionSelected, setRegion, label }) => {
   });
 
   const onMenuFocus = (event) => {
-    event.preventDefault();
+    //event.preventDefault();
   }
 
   console.log("dropdown-ref.current", ref.current);

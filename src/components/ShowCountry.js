@@ -1,37 +1,37 @@
 import React, { useEffect, useState } from "react";
 
-const ShowCountry = ({ country, onInputSelectCountry }) => {
-  const [check, setCheck] = useState(false);
+const ShowCountry = ({ name, onInputSelectCountry }) => {
+  const [checked, setChecked] = useState(false);
 
-  const handleInputChange = (event) => {
-    event.preventDefault();
-    setCheck(event.target.checked);
-    onInputSelectCountry(event.target.checked, event.target.name);
-  };
+  useEffect(() => {
+    onInputSelectCountry(name, !!checked);    
+  }, [checked]);
 
-  const renderedCountry = (
-    <div className="ui checkbox item">
-      <div key={country.name}>
-        <form>
-          <label>
-            <input
-              type="checkbox"
-              name={country.name}
-              checked={check}
-              onChange={handleInputChange}
-            />
-          </label>
-        </form>
-        <p>{country.name}</p>
-      </div>
-    </div>
-  );
   console.count("ShowCountry");
-  console.log(country.name, country.checked);
+  console.log("ShowCountry- ", name, checked);
+  //if (name==="Algeria") {alert("Usbefore rendering"+name+","+checked)}
   return (
-    <div>
-      <div className="ui list">{renderedCountry}</div>
-    </div>
+    <React.Fragment>
+      <div className="item">
+        <div className="ui checkbox">
+          <div key={name}>
+            <label>
+              <input
+                type="checkbox"
+                name={name}            
+                //{...checked ? 'checked=true':'checked=false'}
+                //checked={checked!==undefined ? true:false}
+                checked={checked}
+                onClick={() => {
+                  setChecked(!checked);
+                }}
+              />
+            </label>
+            <p>{name}</p>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
   );
 };
 

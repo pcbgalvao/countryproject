@@ -18,7 +18,7 @@ const ListCountries = ({ activateSearchCI, countriesList }) => {
   }, [countryTerm, countriesList]);
 
   const onInputChange = (event) => {
-    event.preventDefault();
+    //event.preventDefault();
     setCountryTerm(event.target.value);
   };
 

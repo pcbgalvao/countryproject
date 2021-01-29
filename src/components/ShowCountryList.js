@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import CountriesData1 from "../data/contriesData";
+import ShowCountry from "./ShowCountry";
 
 const SearchCountryList = ({ region, countriesList, setCountriesList }) => {
   const [countryTerm, setCountryTerm] = useState("");
@@ -33,14 +34,14 @@ const SearchCountryList = ({ region, countriesList, setCountriesList }) => {
 
   // Event Handlers
   //
-  const handleInputChange = (event) => {
-    event.preventDefault();
-    const { name, checked } = event.target;
+  const OnCheckChange = (name, checked) => {
+    //event.stopPropagation();
+    //const { name, checked } = event.target;
 
     setCountriesList(
       countriesList.map((country) => {
         if (country.name === name) {
-          return { ...country, checked: !getCheckedValue(name) }; // checked }; //;
+          return { ...country, checked: checked }; // checked }; //;
         } else {
           return country;
         }
@@ -49,7 +50,6 @@ const SearchCountryList = ({ region, countriesList, setCountriesList }) => {
   };
 
   const onInputChange = (event) => {
-    event.preventDefault();
     setCountryTerm(event.target.value);
   };
 
@@ -74,20 +74,11 @@ const SearchCountryList = ({ region, countriesList, setCountriesList }) => {
       const checked = getCheckedValue(name);
       return (
         <div key={name}>
-          <div className="item">
-            <div className="ui text">{name}</div>
-            <div className="ui checkbox ">
-              <label >
-                <input
-                  name={name}
-                  type="checkbox"
-                  checked={checked}
-                  onChange={handleInputChange}
-                  onClick={handleInputChange}
-                />
-              </label>
-            </div>
-          </div>
+          <ShowCountry
+            name={name}
+            checked={checked}
+            onInputSelectCountry={OnCheckChange}
+          />
         </div>
       );
     });

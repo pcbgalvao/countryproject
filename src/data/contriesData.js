@@ -339,20 +339,8 @@ const CountriesData1 = [
   },
 ];
 
-const countriesData = async (region) => {
-  const { data } = axios.get(
-    `https://restcountries.eu/rest/v2/region/${region}`,
-    {},
-    {}
-  );
+const apiData = axios.create({
+    baseURL: `https://restcountries.eu/rest/v2/region/${region}`,
+  });
 
-  return data;
-};
-
-const getData = (region) => {
-  const data= countriesData(region)
-
-  return data;
-}
-
-export default CountriesData1;
+export default apiData;
