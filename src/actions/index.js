@@ -1,11 +1,30 @@
-import apiData from "./../data/contriesData";
+import _ from "lodash";
 
-export const fetchData = () => async (dispatch, getState) => {
-  await dispatch(fetchInfo());
+import apiData from "./../data/contriesData";
+import * as ACTION from "./types";
+
+export const fetchDataCountriesRegion = (region) => async (dispatch) => {
+  const url = `/${region}?fields=name;flag;capital;population;area`;
+  const response = await apiData.get(url);
+
+  // transform the array into a dictionary whose
+  // key is country name
+  //const payload=_.keyBy(response.data, 'name')
+  const payload = [...response.data];
+
+  dispatch({ type: ACTION.FETCH_COUNTRIES_INFO, payload: payload });
 };
 
-export const fetchInfo = (region) => async dispatch => {
-  const response = await apiData.get(`/regions${region}?fields=name;flag;capital;population;area`);
+export const selectedRegion = (region) => {
+  return {
+    type: ACTION.SELECTED_REGION,
+    payload: region,
+  };
+};
 
-  dispatch({ type: 'FETCH_DATA', payload: response.data });
+export const checkCountry = (name, check) => {
+  return {
+    type: ACTION.CHECK_COUNTRY,
+    payload: { name, check },
+  };
 };

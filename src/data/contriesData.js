@@ -340,7 +340,7 @@ const CountriesData1 = [
 ];
 
 const apiData = axios.create({
-    baseURL: `https://restcountries.eu/rest/v2/region/${region}`,
+    baseURL: `https://restcountries.eu/rest/v2/region`,
   });
 
 export default apiData;

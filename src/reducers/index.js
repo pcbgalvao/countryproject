@@ -1,11 +1,8 @@
 import { combineReducers } from "redux";
-
-const defaultReducer = (state = [], action) => {
-  return null;
-};
+import dataReducer from "./dataReducer";
+import regionReducer from "./regionReducer";
 
 export default combineReducers({
-  defaultReducer: defaultReducer,
+  dataCountriesRegion: dataReducer,
+  region: regionReducer,
 });
-
-// export default reducersCombined;

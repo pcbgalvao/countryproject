@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import { connect } from "react-redux";
+import {selectedRegion} from './../actions';
 
-const Dropdown = ({ regions, regionSelected, setRegion, label }) => {
+const label = "Select a Region";
+const REGIONS = ["Africa", "Americas", "Asia", "Europe", "Oceania"];
+
+const Dropdown = ({ region, selectedRegion }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
 
@@ -20,42 +25,43 @@ const Dropdown = ({ regions, regionSelected, setRegion, label }) => {
       console.log("Dropdown Component useEffect CLEANUP");
       document.body.removeEventListener("click", onBodyClick);
     };
-  }, [regionSelected]);
+  }, [region]);
 
-  const renderedRegions = regions.map((region) => {
-    if (region === regionSelected) {
+  const renderedRegions = REGIONS.map((item_region) => {
+    if (item_region === region) {
       return null;
     }
 
     return (
       <div
-        key={region}
+        key={item_region}
         className="item"
-        onClick={() => setRegion(region)}
+        onClick={() => selectedRegion(item_region)}
       >
-        {region}
+        {item_region}
       </div>
     );
   });
 
   const onMenuFocus = (event) => {
     //event.preventDefault();
-  }
+  };
 
   console.log("dropdown-ref.current", ref.current);
-  console.count ("DropDown");
-  
+  console.count("DropDown");
+
   return (
     <div>
       <div ref={ref} className="ui form">
         <div className="field">
           <label className="label">{label}</label>
-          <div onFocus={onMenuFocus}
+          <div
+            onFocus={onMenuFocus}
             className={`ui selection dropdown ${open ? "visible active" : ""}`}
             onClick={() => setOpen(!open)}
           >
             <i className="dropdown icon"></i>
-            <div className="text">{regionSelected}</div>
+            <div className="text">{region}</div>
             <div className={`menu ${open ? "visible transition" : ""} `}>
               {renderedRegions}
             </div>
@@ -66,4 +72,13 @@ const Dropdown = ({ regions, regionSelected, setRegion, label }) => {
   );
 };
 
-export default Dropdown;
+const mapStateToProps = (state) => {
+  return {
+    region: state.region,
+    };
+};
+
+export default connect(mapStateToProps, { selectedRegion })(
+  Dropdown
+);
+

@@ -1,41 +1,91 @@
-import React from "react";
+import _ from "lodash";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { fetchDataCountriesRegion, checkCountry } from "../actions";
 import ShowCountry from "./ShowCountry";
+import * as MODE from "./types";
 
-const ListCountries = ({ countriesList, setCountriesList }) => {
-  
-  const onInputSelectCountry = (checked, name) => {
-    console.log("onInputSelectCountry.event.checked-", checked);
-    console.log("onInputSelectCountry.event.name", name);
-    setCountriesList(
-      countriesList.map((country, i) => {
-        if (country.name === name) {
-          return { ...country, checked: checked };
-        } else {
-          return country;
-        }
-      })
-    );
-    console.log("onInputSelectCountry.countriesList-", countriesList[0]);
+const SearchCountryList = ({
+  mode,
+  region,
+  dataCountriesRegion,
+  fetchDataCountriesRegion,
+  //  checkCountry,
+}) => {
+  const [countryTerm, setCountryTerm] = useState("");
+  const [regex, setRegex] = useState("");
+
+  useEffect(() => {
+    if (region && mode === MODE.WRITE) {
+      fetchDataCountriesRegion(region);
+    }
+  }, [mode, region]);
+
+  useEffect(() => {
+    setRegex(new RegExp(countryTerm.toLowerCase()));
+  }, [countryTerm, dataCountriesRegion]);
+
+  const onInputChange = (event) => {
+    setCountryTerm(event.target.value);
   };
 
-  const renderedCountriesNames = countriesList.map((country) => {
-    const { name } = country;
+  const checkCountry = () => {};
+
+  //  const regexFiltered = _.filter(dataCountriesRegion, (country) =>
+  //  regex.test(country.name.toLowerCase())
+  const regexFiltered = dataCountriesRegion.filter((country) =>
+    regex.test(country.name.toLowerCase())
+  );
+  const checkedCountryFiltered = regexFiltered;
+  //const renderedCountriesNames = _.forIn(checkedCountryFiltered,
+  const renderedCountriesNames = regexFiltered.map((country) => {
+    const { name, flag, capital, area, population } = country;
     return (
-      <div>
-        <ShowCountry
-          country={country}
-          onInputSelectCountry={onInputSelectCountry}
-        />
+      <div key={name}>
+        <div className="ui relaxed divided list">
+          <ShowCountry
+            mode={mode}
+            name={name}
+            flag={flag}
+            capital={capital}
+            area={area}
+            population={population}
+            checkCountry={checkCountry}
+          />
+        </div>
       </div>
     );
   });
 
-  console.count("ListCountries");
+  console.count("Search");
   return (
-    <div className="ui container">
-      <div className="ui list">{renderedCountriesNames}</div>
-    </div>
+    <React.Fragment>
+      <div className="ui container">
+        <div className="ui form">
+          <div className="field">
+            <label>Enter Search country</label>
+            <input
+              className="input"
+              value={countryTerm}
+              onChange={onInputChange}
+            />
+          </div>
+        </div>
+        <div>Countries Shown: {dataCountriesRegion.length}</div>
+        <div className="ui list">{renderedCountriesNames}</div>
+      </div>
+    </React.Fragment>
   );
 };
 
-export default ListCountries;
+const mapStateToProps = (state) => {
+  return {
+    region: state.region,
+    dataCountriesRegion: state.dataCountriesRegion,
+  };
+};
+
+//export default connect(mapStateToProps, { fetchDataCountriesRegion })(SearchCountryList);
+export default connect(mapStateToProps, {
+  fetchDataCountriesRegion,
+})(SearchCountryList);
