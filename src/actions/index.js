@@ -6,11 +6,7 @@ import * as ACTION from "./types";
 export const fetchDataCountriesRegion = (region) => async (dispatch) => {
   const url = `/${region}?fields=name;flag;capital;population;area`;
   const response = await apiData.get(url);
-
-  // transform the array into a dictionary whose
-  // key is country name
-  //const payload=_.keyBy(response.data, 'name')
-  const payload = [...response.data];
+  const payload = response.data;
 
   dispatch({ type: ACTION.FETCH_COUNTRIES_INFO, payload: payload });
 };
@@ -26,5 +22,12 @@ export const checkCountry = (name, check) => {
   return {
     type: ACTION.CHECK_COUNTRY,
     payload: { name, check },
+  };
+};
+
+export const isCountryChecked = (name) => {
+  return {
+    type: ACTION.COUNTRY_CHECKED,
+    payload: { name },
   };
 };

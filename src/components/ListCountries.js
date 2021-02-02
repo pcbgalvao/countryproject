@@ -29,17 +29,39 @@ const SearchCountryList = ({
     setCountryTerm(event.target.value);
   };
 
-  const checkCountry = () => {};
-
   //  const regexFiltered = _.filter(dataCountriesRegion, (country) =>
   //  regex.test(country.name.toLowerCase())
-  const regexFiltered = dataCountriesRegion.filter((country) =>
-    regex.test(country.name.toLowerCase())
-  );
-  const checkedCountryFiltered = regexFiltered;
+
   //const renderedCountriesNames = _.forIn(checkedCountryFiltered,
-  const renderedCountriesNames = regexFiltered.map((country) => {
-    const { name, flag, capital, area, population } = country;
+  let countriesListLength = 0;
+  if (mode === MODE.READ) {
+    dataCountriesRegion = dataCountriesRegion
+      .filter((country) =>
+        regex.test(country.name.toLowerCase())
+      ).filter((country, index) => {
+        if (country.checked) {
+          countriesListLength = index;
+          return true;
+        }
+        return false;
+      })
+  } else { // MODE.WRITE
+    dataCountriesRegion = dataCountriesRegion
+      .filter((country, index) => {
+        countriesListLength = index;
+        return regex.test(country.name.toLowerCase())
+      })
+      .sort((country1, country2) => {
+        if (country1.checked > country2.checked) {
+          return -1
+        }
+        return 1
+      })
+
+  }
+
+  const renderedCountriesNames = dataCountriesRegion.map((country) => {
+    const { name, flag, capital, area, population, checked } = country;
     return (
       <div key={name}>
         <div className="ui relaxed divided list">
@@ -49,8 +71,8 @@ const SearchCountryList = ({
             flag={flag}
             capital={capital}
             area={area}
+            checked={checked}
             population={population}
-            checkCountry={checkCountry}
           />
         </div>
       </div>
@@ -58,24 +80,27 @@ const SearchCountryList = ({
   });
 
   console.count("Search");
+
   return (
     <React.Fragment>
       <div className="ui container">
-        <div className="ui form">
-          <div className="field">
-            <label>Enter Search country</label>
-            <input
-              className="input"
-              value={countryTerm}
-              onChange={onInputChange}
-            />
+        {(mode === MODE.WRITE || (mode === MODE.READ && countriesListLength > 0)) ?
+          <div className="ui form">
+            <div className="field">
+              <label>Enter Search country</label>
+              <input
+                className="input"
+                value={countryTerm}
+                onChange={onInputChange}
+              />
+            </div>
           </div>
-        </div>
-        <div>Countries Shown: {dataCountriesRegion.length}</div>
+          : null}        
         <div className="ui list">{renderedCountriesNames}</div>
       </div>
     </React.Fragment>
   );
+
 };
 
 const mapStateToProps = (state) => {

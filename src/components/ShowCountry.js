@@ -2,22 +2,14 @@ import React, { useEffect, useState } from "react";
 import CheckBox from "./CheckBox";
 import * as MODE from "./types";
 
-const ShowCountry = ({ mode, name, flag, capital, area, population, checkCountry }) => {
-  const [checked, setChecked] = useState(false);
-  // const { name, flag, capital, area, population } = country;
-
-  useEffect(() => {
-    if (mode === MODE.WRITE) {
-      checkCountry(name, !!checked);
-    }
-  }, [checked, mode]);
+const ShowCountry = ({ mode, name, flag, capital, area, population, checked}) => {
 
   return (
     <React.Fragment>
       <div className="item">
         <i className="icon">
           {mode === MODE.WRITE ? (
-            <CheckBox name={name} checked={checked} checkCountry={checkCountry} />
+            <CheckBox mode={mode} name={name} checked={checked} />
           ) : null}
         </i>
         <div className="content">
