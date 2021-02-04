@@ -8,9 +8,7 @@ const SideBar = ({ region, children }) => {
 
   if (region) {
     return (
-      <div className="ui list">
-        <div className="ui centered header">Region: {region}</div>
-
+      <div className="ui list">        
         <div className="ui row">
           {children}
         </div>

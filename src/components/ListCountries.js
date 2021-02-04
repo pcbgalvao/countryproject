@@ -54,6 +54,12 @@ const SearchCountryList = ({
         return regex.test(country.name.toLowerCase())
       })
       .sort((country1, country2) => {
+        if (country1.name > country2.name) {
+          return 1
+        }
+        return -1
+      })
+      .sort((country1, country2) => {
         if (country1.checked > country2.checked) {
           return -1
         }
@@ -91,9 +97,9 @@ const SearchCountryList = ({
                   onChange={onInputChange}
                 />
               </div>
-
-            </div>
-            : null}
+              Number of countries: {countriesListLength}
+            </div>            
+            : null}            
         </div>
         <div className="ui list">{renderedCountriesNames}</div>
       </div>
