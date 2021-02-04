@@ -4,12 +4,30 @@ import apiData from "./../data/contriesData";
 import * as ACTION from "./types";
 
 export const fetchDataCountriesRegion = (region) => async (dispatch) => {
-  const url = `/${region}?fields=name;flag;capital;population;area`;
+  const url = `/${region}?fields=name;flag;capital;population;area;callingCodes;latlng;demonym;numericCode`;
   const response = await apiData.get(url);
-  const payload = response.data;
+  const payload = response.data.map(country=>{
+    return{
+      ...country,
+      checked: false
+    }
+  });
 
   dispatch({ type: ACTION.FETCH_COUNTRIES_INFO, payload: payload });
 };
+export const selectedCountry = country => {
+  return {
+    type: ACTION.SELECTED_COUNTRY,
+    payload: country
+  }
+}
+
+export const unSelectedCountry = name => {
+  return {
+    type: ACTION.UNSELECTED_COUNTRY,
+    payload: name
+  }
+}
 
 export const selectedRegion = (region) => {
   return {

@@ -1,15 +1,30 @@
 import React from "react";
+import { connect } from 'react-redux';
 import ListCountries from "./ListCountries";
 import * as MODE from './types'
 
-const SideBar = ({ region, countriesList, setCountriesList }) => {
+const SideBar = ({ region, children }) => {
   console.count("SideBar");
-  return (
-    <div className="ui list">
-      <div className="ui centered header">Region: {region}</div>
-      <ListCountries mode={MODE.WRITE} />
-    </div>
-  );
+
+  if (region) {
+    return (
+      <div className="ui list">
+        <div className="ui centered header">Region: {region}</div>
+
+        <div className="ui row">
+          {children}
+        </div>
+      </div>
+    );
+  }
+  return null;
+
+}
+
+const mapStateToProps = (state) => {
+  return {
+    region: state.region,
+  };
 };
 
-export default SideBar;
+export default connect(mapStateToProps, null)(SideBar);

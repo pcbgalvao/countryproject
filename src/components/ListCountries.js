@@ -9,11 +9,12 @@ const SearchCountryList = ({
   mode,
   region,
   dataCountriesRegion,
-  fetchDataCountriesRegion,
-  //  checkCountry,
+  fetchDataCountriesRegion
 }) => {
   const [countryTerm, setCountryTerm] = useState("");
   const [regex, setRegex] = useState("");
+
+  let countriesListLength = dataCountriesRegion.length;
 
   useEffect(() => {
     if (region && mode === MODE.WRITE) {
@@ -33,22 +34,23 @@ const SearchCountryList = ({
   //  regex.test(country.name.toLowerCase())
 
   //const renderedCountriesNames = _.forIn(checkedCountryFiltered,
-  let countriesListLength = 0;
+
   if (mode === MODE.READ) {
+    countriesListLength = dataCountriesRegion.filter(country => country.checked).length;
     dataCountriesRegion = dataCountriesRegion
       .filter((country) =>
         regex.test(country.name.toLowerCase())
       ).filter((country, index) => {
         if (country.checked) {
-          countriesListLength = index;
+
           return true;
         }
         return false;
       })
-  } else { // MODE.WRITE
+  } else if (mode === MODE.WRITE) {
     dataCountriesRegion = dataCountriesRegion
       .filter((country, index) => {
-        countriesListLength = index;
+
         return regex.test(country.name.toLowerCase())
       })
       .sort((country1, country2) => {
@@ -57,22 +59,16 @@ const SearchCountryList = ({
         }
         return 1
       })
-
   }
 
   const renderedCountriesNames = dataCountriesRegion.map((country) => {
-    const { name, flag, capital, area, population, checked } = country;
+    const { name } = country;
     return (
       <div key={name}>
         <div className="ui relaxed divided list">
           <ShowCountry
             mode={mode}
-            name={name}
-            flag={flag}
-            capital={capital}
-            area={area}
-            checked={checked}
-            population={population}
+            country={country}
           />
         </div>
       </div>
@@ -83,19 +79,22 @@ const SearchCountryList = ({
 
   return (
     <React.Fragment>
-      <div className="ui container">
-        {(mode === MODE.WRITE || (mode === MODE.READ && countriesListLength > 0)) ?
-          <div className="ui form">
-            <div className="field">
-              <label>Enter Search country</label>
-              <input
-                className="input"
-                value={countryTerm}
-                onChange={onInputChange}
-              />
+      <div className="ui float">
+        <div className="ui list">
+          {(mode !== MODE.INFO && countriesListLength > 1) ?
+            <div className="ui form">
+              <div className="field">
+                <label>Enter Search country</label>
+                <input
+                  className="input"
+                  value={countryTerm}
+                  onChange={onInputChange}
+                />
+              </div>
+
             </div>
-          </div>
-          : null}        
+            : null}
+        </div>
         <div className="ui list">{renderedCountriesNames}</div>
       </div>
     </React.Fragment>
@@ -103,10 +102,16 @@ const SearchCountryList = ({
 
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+  let dataCountriesRegion
+  if (ownProps.mode === "INFO") {
+    dataCountriesRegion = Object.keys(state.selectedCountry).length > 0 ? [state.selectedCountry] : [];
+  } else {
+    dataCountriesRegion = state.dataCountriesRegion
+  }
   return {
     region: state.region,
-    dataCountriesRegion: state.dataCountriesRegion,
+    dataCountriesRegion: dataCountriesRegion
   };
 };
 

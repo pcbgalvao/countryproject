@@ -6,3 +6,5 @@ copy
 *copy
 node_*
 .lixo
+*backup*.*
+*copy*.*
