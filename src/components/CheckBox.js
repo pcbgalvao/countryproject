@@ -1,20 +1,19 @@
 import React from "react";
 import { connect } from 'react-redux';
-import { checkCountry } from '../actions';
-import { selectedCountry } from '../actions';
-import { unSelectedCountry } from '../actions';
+import { toogleCheckedCountry } from '../actions';
+import { selectCountry } from '../actions';
+import { unSelectCountry } from '../actions';
 
-import * as MODE from './types';
+import * as MODE from '../constants';
 
-const CheckBox = ({ mode, country, selectedCountry,
-  checkCountry }) => {
+const CheckBox = ({ mode, country, unSelectCountry, selectCountry, toogleCheckedCountry }) => {
 
   const { name, checked } = country;
 
   let classNameButton;
   let labelButton;
   if (mode === MODE.READ) {
-    classNameButton = "ui small button blue";
+    classNameButton = "ui small button green";
     labelButton = "Show Info";
   } else if (mode === MODE.WRITE) {
     if (checked) {
@@ -33,36 +32,42 @@ const CheckBox = ({ mode, country, selectedCountry,
 
   return (
     <React.Fragment>
-      <div className="ui checkbox">
-        <div key={name}>
-          {(mode === MODE.READ) &&
-            <button onClick={() => {
-              selectedCountry(country);
-            }} className={classNameButton}>
-              <i className="icon" />
-              {labelButton}
-            </button>}
-          {(mode === MODE.WRITE) &&
-            <button onClick={() => {
-              checkCountry(name, !checked);
-              if (checked) {
-                unSelectedCountry(name)
-              }
-            }} className={classNameButton}>
-              <i className="icon" />
-              {labelButton}
-            </button>}
-        </div>
+      <div className="">
+
+        {(mode === MODE.READ) &&
+          <button onClick={() => {
+            selectCountry(country);
+          }} className={classNameButton}>
+            <i className="icon" />
+            {labelButton}
+          </button>}
+        {(mode === MODE.WRITE) &&
+          <button onClick={() => {
+            if (checked) {
+              unSelectCountry()
+            }
+            toogleCheckedCountry(country);
+
+          }} className={classNameButton}>
+            <i className="icon" />
+            {labelButton}
+          </button>}
+
       </div>
     </React.Fragment>
   );
 };
 
+const mapStateToProps = (state, ownProps) => {
+  const name = ownProps.country.name;
+  return ({
+    country_checked: state.dataCountries[name].checked
+  })
+}
 
-//export default connect(mapStateToProps, { fetchDataCountriesRegion })(SearchCountryList);
-export default connect(null, {
-  unSelectedCountry,
-  selectedCountry,
-  checkCountry
+export default connect(mapStateToProps, {
+  unSelectCountry,
+  selectCountry,
+  toogleCheckedCountry
 })(CheckBox);
 

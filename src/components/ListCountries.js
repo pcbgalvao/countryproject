@@ -1,58 +1,44 @@
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { fetchDataCountriesRegion, checkCountry } from "../actions";
+import { toogleCheckedCountry } from "../actions";
+import { fetchDataCountriesRegion } from "../actions";
 import ShowCountry from "./ShowCountry";
-import * as MODE from "./types";
+import * as CONSTS from "../constants";
 
-const SearchCountryList = ({
+const ListCountries = ({
   mode,
-  region,
-  dataCountriesRegion,
+  selectedRegion,
+  dataLength,
+  dataCountries,
   fetchDataCountriesRegion
 }) => {
   const [countryTerm, setCountryTerm] = useState("");
   const [regex, setRegex] = useState("");
 
-  let countriesListLength = dataCountriesRegion.length;
-
   useEffect(() => {
-    if (region && mode === MODE.WRITE) {
-      fetchDataCountriesRegion(region);
+    if (selectedRegion && mode === CONSTS.WRITE) {
+      fetchDataCountriesRegion(selectedRegion);
     }
-  }, [mode, region]);
+  }, [mode, selectedRegion]);
 
   useEffect(() => {
     setRegex(new RegExp(countryTerm.toLowerCase()));
-  }, [countryTerm, dataCountriesRegion]);
+  }, [countryTerm, dataCountries]);
 
-  const onInputChange = (event) => {
-    setCountryTerm(event.target.value);
-  };
 
-  //  const regexFiltered = _.filter(dataCountriesRegion, (country) =>
-  //  regex.test(country.name.toLowerCase())
-
-  //const renderedCountriesNames = _.forIn(checkedCountryFiltered,
-
-  if (mode === MODE.READ) {
-    countriesListLength = dataCountriesRegion.filter(country => country.checked).length;
-    dataCountriesRegion = dataCountriesRegion
+  if (mode === CONSTS.READ) {
+    dataCountries = Object.values(dataCountries)
+      .filter((country) => country.checked)
       .filter((country) =>
         regex.test(country.name.toLowerCase())
-      ).filter((country, index) => {
-        if (country.checked) {
+      )
 
-          return true;
-        }
-        return false;
-      })
-  } else if (mode === MODE.WRITE) {
-    dataCountriesRegion = dataCountriesRegion
-      .filter((country, index) => {
-
-        return regex.test(country.name.toLowerCase())
-      })
+  } else if (mode === CONSTS.WRITE) {
+    dataCountries = Object.values(dataCountries)
+      .filter((country) =>
+        regex.test(country.name.toLowerCase())
+      )
       .sort((country1, country2) => {
         if (country1.name > country2.name) {
           return 1
@@ -67,61 +53,79 @@ const SearchCountryList = ({
       })
   }
 
-  const renderedCountriesNames = dataCountriesRegion.map((country) => {
+  const renderedCountriesNames = Object.values(dataCountries).map((country) => {
     const { name } = country;
     return (
-      <div key={name}>
-        <div className="ui relaxed divided list">
-          <ShowCountry
-            mode={mode}
-            country={country}
-          />
+      <div className="ui segment">
+        <div key={name}>
+          <div className="item">
+            <ShowCountry
+              mode={mode}
+              country={country}
+            />
+          </div>
         </div>
       </div>
     );
   });
 
   console.count("Search");
+  console.log('mode-', mode);
+  console.log('dataLength-', dataLength);
 
   return (
     <React.Fragment>
-      <div className="ui float">
-        <div className="ui list">
-          {(mode !== MODE.INFO && countriesListLength > 1) ?
-            <div className="ui form">
-              <div className="field">
-                <label>Enter Search country</label>
-                <input
-                  className="input"
-                  value={countryTerm}
-                  onChange={onInputChange}
-                />
-              </div>
-              Number of countries: {countriesListLength}
-            </div>            
-            : null}            
+      {(dataLength > 1) ?
+        <div className="ui form">
+          <div className="field">
+            <label>Search country</label>
+            <input
+              className="input"
+              value={countryTerm}
+              onChange={(event) => { setCountryTerm(event.target.value) }}
+            />
+          </div>
+              Number of countries: {dataLength}
         </div>
+        : null}
+
+      {(dataLength > 0) ?
         <div className="ui list">{renderedCountriesNames}</div>
-      </div>
-    </React.Fragment>
+        : null
+      }
+    </React.Fragment >
   );
 
 };
 
 const mapStateToProps = (state, ownProps) => {
-  let dataCountriesRegion
-  if (ownProps.mode === "INFO") {
-    dataCountriesRegion = Object.keys(state.selectedCountry).length > 0 ? [state.selectedCountry] : [];
-  } else {
-    dataCountriesRegion = state.dataCountriesRegion
+  const mode = ownProps.mode;
+  if (Object.keys(state.dataCountries).length === 0) {
+    return ({
+      dataLength: 0,
+      dataCountries: {}
+    })
   }
-  return {
-    region: state.region,
-    dataCountriesRegion: dataCountriesRegion
-  };
+  switch (mode) {
+    case CONSTS.WRITE:
+      return ({
+        dataLength: _.size(state.dataCountries),
+        dataCountries: state.dataCountries
+      })
+    case CONSTS.READ: {
+      const tempListCountries = Object.values(state.dataCountries).filter(country => country.checked);
+      return ({
+        dataLength: tempListCountries.length,
+        dataCountries: tempListCountries
+      })
+    }
+    case CONSTS.INFO:
+      return ({
+        dataLength: _.size(state.selectedCountry) > 0 ? 1 : 0,
+        dataCountries: [state.selectedCountry]
+      })
+  }
 };
 
-//export default connect(mapStateToProps, { fetchDataCountriesRegion })(SearchCountryList);
-export default connect(mapStateToProps, {
-  fetchDataCountriesRegion,
-})(SearchCountryList);
+export default connect(mapStateToProps, { fetchDataCountriesRegion })(ListCountries);
+// export default connect(mapStateToProps, null)(SearchCountryList);

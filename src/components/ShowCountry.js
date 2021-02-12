@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import CheckBox from "./CheckBox";
-import * as MODE from "./types";
+import * as CONSTS from "../constants";
 
 const ShowCountry = ({ mode, country }) => {
-  const { name, flag} = country;
+  const { name, flag } = country;
 
-  const renderedCountryFields = (country) => Object.keys(country).map(field => {
+  if (mode === CONSTS.INFO) {
+    console.log("stop");
+  }
+
+  const renderedCountryFields = Object.keys(country).map(field => {
     if (field !== 'name' && field !== 'checked' && field !== "flag") {
       return (
         <div key={field}>
@@ -19,30 +23,34 @@ const ShowCountry = ({ mode, country }) => {
 
   //console.log('renderedCountryFields(country)-', renderedCountryFields(country));
 
+  if (Object.keys(country).length === 0) {
+    return null
+  }
+
   return (
     <React.Fragment>
-      <div className="item">
-        <i className="icon">
-          {mode !== MODE.INFO ? (
+      <div className="content">
+        <div className="ui left labeled button">
+
+          {mode !== CONSTS.INFO ? (
             <CheckBox mode={mode} country={country} />
           ) : null}
-        </i>
 
-        <div className="content">
-          <a className="header">{name}</a>
-          <div className="description">
-            {mode === MODE.INFO ? (
-              <div>
-                <img className="ui avatar image" src={flag} />
-                <div className="ui list">
-                  {renderedCountryFields(country)}
-                </div>
+        </div>
+        <a className="ui verticaly centered basic">{name}</a>
+        <div className="description">
+          {mode === CONSTS.INFO ? (
+            <div>
+              <img className="ui avatar image" src={flag} />
+              <div className="ui list">
+                {renderedCountryFields}
               </div>
-            ) : null}
+            </div>
+          ) : null}
 
-          </div>
         </div>
       </div>
+
     </React.Fragment>
   );
 };

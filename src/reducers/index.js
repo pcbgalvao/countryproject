@@ -1,10 +1,8 @@
 import { combineReducers } from "redux";
-import dataReducer from "./dataReducer";
-import regionReducer from "./regionReducer";
-import selectedCountryReducer from "./selectedCountryReducer";
+import dataReducers from "./dataReducers";
+import selectedCountryReducers from "./selectedCountryReducers";
 
 export default combineReducers({
-  dataCountriesRegion: dataReducer,
-  region: regionReducer,
-  selectedCountry: selectedCountryReducer
+  dataCountries: dataReducers,  
+  selectedCountry: selectedCountryReducers
 });

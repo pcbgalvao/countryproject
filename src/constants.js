@@ -1,0 +1,25 @@
+
+
+
+export const WRITE = "WRITE";
+export const READ = "READ";
+export const INFO = "INFO";
+export const CHECKED_COUNTRY = "CHECKED_COUNTRY";
+
+
+// Actions Verbs
+
+export const FETCH_COUNTRIES_INFO = "FETCH_COUNTRIES_INFO";
+export const FETCH_COUNTRY_NAMES = "FETCH_COUNTRY_NAMES";
+export const FETCH_COUNTRY_INFO = "FETCH_COUNTRY_INFO";
+
+export const CHECKED_COUNTRIES = "CHECKED_COUNTRIES";
+export const TOOGLE_CHECKED_COUNTRY = "TOOGLE_CHECKED_COUNTRY";
+export const UNCHECK_COUNTRY = "UNCHECK_COUNTRY";
+export const COUNTRY_CHECKED = "COUNTRY_CHECKED";
+
+export const SELECT_COUNTRY = "SELECT_COUNTRY,";
+export const UNSELECT_COUNTRY = "UNSELECT_COUNTRY";
+
+
+

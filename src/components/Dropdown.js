@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { connect } from "react-redux";
-import {selectedRegion} from './../actions';
 
 const label = "Select a Region";
 const REGIONS = ["Africa", "Americas", "Asia", "Europe", "Oceania"];
 
-const Dropdown = ({ region, selectedRegion }) => {
+const Dropdown = ({ selectedRegion, setSelectedRegion }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
 
@@ -22,13 +20,13 @@ const Dropdown = ({ region, selectedRegion }) => {
     document.body.addEventListener("click", onBodyClick, { capture: true });
 
     return () => {
-      console.log("Dropdown Component useEffect CLEANUP");
+      // console.log("Dropdown Component useEffect CLEANUP");
       document.body.removeEventListener("click", onBodyClick);
     };
-  }, [region]);
+  }, [selectedRegion]);
 
   const renderedRegions = REGIONS.map((item_region) => {
-    if (item_region === region) {
+    if (item_region === selectedRegion) {
       return null;
     }
 
@@ -36,7 +34,7 @@ const Dropdown = ({ region, selectedRegion }) => {
       <div
         key={item_region}
         className="item"
-        onClick={() => selectedRegion(item_region)}
+        onClick={() => setSelectedRegion(item_region)}
       >
         {item_region}
       </div>
@@ -47,8 +45,8 @@ const Dropdown = ({ region, selectedRegion }) => {
     //event.preventDefault();
   };
 
-  console.log("dropdown-ref.current", ref.current);
-  console.count("DropDown");
+  //console.log("dropdown-ref.current", ref.current);
+  //console.count("DropDown");
 
   return (
     <div>
@@ -61,7 +59,7 @@ const Dropdown = ({ region, selectedRegion }) => {
             onClick={() => setOpen(!open)}
           >
             <i className="dropdown icon"></i>
-            <div className="text">{region}</div>
+            <div className="text">{selectedRegion}</div>
             <div className={`menu ${open ? "visible transition" : ""} `}>
               {renderedRegions}
             </div>
@@ -72,13 +70,4 @@ const Dropdown = ({ region, selectedRegion }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    region: state.region,
-    };
-};
-
-export default connect(mapStateToProps, { selectedRegion })(
-  Dropdown
-);
-
+export default Dropdown;
