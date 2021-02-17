@@ -50,9 +50,10 @@ const Dropdown = ({ selectedRegion, setSelectedRegion }) => {
 
   return (
     <div>
-      <div ref={ref} className="ui form">
+      <div className="ui header label">{label}</div>
+      <div ref={ref} className="ui fluid form">
         <div className="field">
-          <label className="label">{label}</label>
+          <label className="label"></label>
           <div
             onFocus={onMenuFocus}
             className={`ui selection dropdown ${open ? "visible active" : ""}`}

@@ -13,7 +13,7 @@ const App = () => {
   return (
     <div>
       <div className="ui container">
-        <div className="menu">
+        <div className="ui menu">
           <Dropdown selectedRegion={selectedRegion} setSelectedRegion={setSelectedRegion} />
         </div>
       </div>

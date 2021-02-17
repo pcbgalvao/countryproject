@@ -33,7 +33,6 @@ const CheckBox = ({ mode, country, unSelectCountry, selectCountry, toogleChecked
   return (
     <React.Fragment>
       <div className="">
-
         {(mode === MODE.READ) &&
           <button onClick={() => {
             selectCountry(country);
@@ -44,7 +43,7 @@ const CheckBox = ({ mode, country, unSelectCountry, selectCountry, toogleChecked
         {(mode === MODE.WRITE) &&
           <button onClick={() => {
             if (checked) {
-              unSelectCountry()
+              unSelectCountry(name)
             }
             toogleCheckedCountry(country);
 

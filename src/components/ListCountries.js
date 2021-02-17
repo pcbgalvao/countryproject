@@ -27,30 +27,25 @@ const ListCountries = ({
   }, [countryTerm, dataCountries]);
 
 
-  if (mode === CONSTS.READ) {
-    dataCountries = Object.values(dataCountries)
-      .filter((country) => country.checked)
-      .filter((country) =>
-        regex.test(country.name.toLowerCase())
-      )
+  // Helper Functions
+  const sortByChecked = (country1, country2) => {
+    if (country1.checked > country2.checked) { return -1 }
+    else { return 1 }
+  }
 
-  } else if (mode === CONSTS.WRITE) {
+  const sortByCountry = (country1, country2) => {
+    if (country1.name > country2.name) { return 1 }
+    else {
+      return -1
+    }
+  }
+
+  if (mode === CONSTS.WRITE || mode === CONSTS.READ) {
     dataCountries = Object.values(dataCountries)
-      .filter((country) =>
-        regex.test(country.name.toLowerCase())
-      )
-      .sort((country1, country2) => {
-        if (country1.name > country2.name) {
-          return 1
-        }
-        return -1
-      })
-      .sort((country1, country2) => {
-        if (country1.checked > country2.checked) {
-          return -1
-        }
-        return 1
-      })
+      .filter((country) => regex.test(country.name.toLowerCase()))
+      .sort(sortByCountry)
+      .sort(sortByChecked)
+
   }
 
   const renderedCountriesNames = Object.values(dataCountries).map((country) => {
@@ -114,6 +109,7 @@ const mapStateToProps = (state, ownProps) => {
       })
     case CONSTS.READ: {
       const tempListCountries = Object.values(state.dataCountries).filter(country => country.checked);
+      //const tempListCountries= _.filter(state.dataCountries, country=>country.checked)
       return ({
         dataLength: tempListCountries.length,
         dataCountries: tempListCountries

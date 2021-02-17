@@ -7,9 +7,9 @@ export const selectCountry = country => {
     }
   }
   
-  export const unSelectCountry = () => {
+  export const unSelectCountry = (name) => {
     return {
       type: ACTION.UNSELECT_COUNTRY,
-      payload: {}
+      payload: name
     }
   }
