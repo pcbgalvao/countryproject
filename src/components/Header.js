@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const label = "Select a Region";
+const dropdownLabel = "Select a Region";
 const REGIONS = ["Africa", "Americas", "Asia", "Europe", "Oceania"];
 
-const Dropdown = ({ selectedRegion, setSelectedRegion }) => {
+const Header = ({ selectedRegion, setSelectedRegion }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
 
@@ -49,11 +49,10 @@ const Dropdown = ({ selectedRegion, setSelectedRegion }) => {
   //console.count("DropDown");
 
   return (
-    <div>
-      <div className="ui header label">{label}</div>
-      <div ref={ref} className="ui fluid form">
+    <div className="">      
+      <div ref={ref} className="ui fluid container">
         <div className="field">
-          <label className="label"></label>
+          <label className="ui header">{dropdownLabel}: </label>
           <div
             onFocus={onMenuFocus}
             className={`ui selection dropdown ${open ? "visible active" : ""}`}
@@ -71,4 +70,4 @@ const Dropdown = ({ selectedRegion, setSelectedRegion }) => {
   );
 };
 
-export default Dropdown;
+export default Header;

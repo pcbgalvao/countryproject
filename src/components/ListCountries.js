@@ -1,30 +1,34 @@
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { toogleCheckedCountry } from "../actions";
-import { fetchDataCountriesRegion } from "../actions";
 import ShowCountry from "./ShowCountry";
-import * as CONSTS from "../constants";
+import * as MODE from "../constants";
+import { fetchData } from '../store/dataSlice';
 
 const ListCountries = ({
   mode,
   selectedRegion,
   dataLength,
-  dataCountries,
-  fetchDataCountriesRegion
+  data,
+  fetchData
 }) => {
+
+  console.log('data-', data);
+  console.log('dataLength-', dataLength);
+  console.log('mode-', mode);
+
   const [countryTerm, setCountryTerm] = useState("");
   const [regex, setRegex] = useState("");
 
   useEffect(() => {
-    if (selectedRegion && mode === CONSTS.WRITE) {
-      fetchDataCountriesRegion(selectedRegion);
+    if (selectedRegion && mode === MODE.WRITE) {
+      fetchData(selectedRegion);
     }
   }, [mode, selectedRegion]);
 
   useEffect(() => {
     setRegex(new RegExp(countryTerm.toLowerCase()));
-  }, [countryTerm, dataCountries]);
+  }, [countryTerm, data]);
 
 
   // Helper Functions
@@ -40,15 +44,15 @@ const ListCountries = ({
     }
   }
 
-  if (mode === CONSTS.WRITE || mode === CONSTS.READ) {
-    dataCountries = Object.values(dataCountries)
+  if (mode === MODE.WRITE || mode === MODE.READ) {
+    data = Object.values(data)
       .filter((country) => regex.test(country.name.toLowerCase()))
       .sort(sortByCountry)
       .sort(sortByChecked)
 
   }
 
-  const renderedCountriesNames = Object.values(dataCountries).map((country) => {
+  const renderedCountriesNames = Object.values(data).map((country) => {
     const { name } = country;
     return (
       <div className="ui segment">
@@ -95,33 +99,34 @@ const ListCountries = ({
 
 const mapStateToProps = (state, ownProps) => {
   const mode = ownProps.mode;
-  if (Object.keys(state.dataCountries).length === 0) {
+  if (Object.keys(state.data).length === 0) {
     return ({
       dataLength: 0,
-      dataCountries: {}
+      data: {}
     })
   }
   switch (mode) {
-    case CONSTS.WRITE:
+    case MODE.WRITE:
       return ({
-        dataLength: _.size(state.dataCountries),
-        dataCountries: state.dataCountries
+        dataLength: _.size(state.data),
+        data: state.data
       })
-    case CONSTS.READ: {
-      const tempListCountries = Object.values(state.dataCountries).filter(country => country.checked);
-      //const tempListCountries= _.filter(state.dataCountries, country=>country.checked)
+    case MODE.READ: {
+      const tempListCountries = Object.values(state.data).filter(country => country.checked);
+      // Alternative code: 
+      // const tempListCountries= _.filter(state.data, country=>country.checked)
       return ({
         dataLength: tempListCountries.length,
-        dataCountries: tempListCountries
+        data: tempListCountries
       })
     }
-    case CONSTS.INFO:
+    case MODE.INFO:
       return ({
         dataLength: _.size(state.selectedCountry) > 0 ? 1 : 0,
-        dataCountries: [state.selectedCountry]
+        data: {[state.selectedCountry.name]: state.selectedCountry}
       })
   }
 };
 
-export default connect(mapStateToProps, { fetchDataCountriesRegion })(ListCountries);
-// export default connect(mapStateToProps, null)(SearchCountryList);
+export default connect(mapStateToProps, { fetchData })(ListCountries);
+

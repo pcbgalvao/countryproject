@@ -8,3 +8,4 @@ node_*
 .lixo
 *backup*.*
 *copy*.*
+.eslintcache

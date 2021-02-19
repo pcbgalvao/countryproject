@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import CheckBox from "./CheckBox";
-import * as CONSTS from "../constants";
+import * as MODE from "../constants";
 
 const ShowCountry = ({ mode, country }) => {
   const { name, flag } = country;
 
-  if (mode === CONSTS.INFO) {
+  if (mode === MODE.INFO) {
     console.log("stop");
   }
 
@@ -32,14 +32,14 @@ const ShowCountry = ({ mode, country }) => {
       <div className="content">
         <div className="ui left labeled button">
 
-          {mode !== CONSTS.INFO ? (
+          {mode !== MODE.INFO ? (
             <CheckBox mode={mode} country={country} />
           ) : null}
 
         </div>
         <a className="ui verticaly centered basic">{name}</a>
         <div className="description">
-          {mode === CONSTS.INFO ? (
+          {mode === MODE.INFO ? (
             <div>
               <img className="ui avatar image" src={flag} />
               <div className="ui list">

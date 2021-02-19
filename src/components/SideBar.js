@@ -1,6 +1,5 @@
 import React from "react";
 import ListCountries from "./ListCountries";
-import * as MODE from '../constants'
 
 const SideBar = ({ children }) => {
   console.count("SideBar");

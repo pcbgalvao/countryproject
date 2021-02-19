@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Dropdown from "./Dropdown";
+import Header from "./Header";
 import SideBar from "./SideBar";
 import ListCountries from "./ListCountries";
 import * as MODE from '../constants';
@@ -11,10 +11,10 @@ const App = () => {
   console.count("App");
 
   return (
-    <div>
-      <div className="ui container">
-        <div className="ui menu">
-          <Dropdown selectedRegion={selectedRegion} setSelectedRegion={setSelectedRegion} />
+    <div className="ui container">
+      <div className="ui segment">
+        <div className="ui fixed floated menu">
+          <Header selectedRegion={selectedRegion} setSelectedRegion={setSelectedRegion} />
         </div>
       </div>
       <div className="ui segment">

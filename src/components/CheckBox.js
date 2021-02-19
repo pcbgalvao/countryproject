@@ -1,12 +1,18 @@
 import React from "react";
 import { connect } from 'react-redux';
-import { toogleCheckedCountry } from '../actions';
-import { selectCountry } from '../actions';
-import { unSelectCountry } from '../actions';
+import { toogleCheckedCountry } from '../store/dataSlice';
+import { selectCountry } from '../store/selectedCountrySlice';
+import { unSelectCountry } from '../store/selectedCountrySlice';
 
 import * as MODE from '../constants';
 
-const CheckBox = ({ mode, country, unSelectCountry, selectCountry, toogleCheckedCountry }) => {
+const CheckBox = ({
+  mode,
+  country,
+  unSelectCountry,
+  selectCountry,
+  toogleCheckedCountry
+}) => {
 
   const { name, checked } = country;
 
@@ -60,7 +66,7 @@ const CheckBox = ({ mode, country, unSelectCountry, selectCountry, toogleChecked
 const mapStateToProps = (state, ownProps) => {
   const name = ownProps.country.name;
   return ({
-    country_checked: state.dataCountries[name].checked
+    country_checked: state.data[name].checked
   })
 }
 
